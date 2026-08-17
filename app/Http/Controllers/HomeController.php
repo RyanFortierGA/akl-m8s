@@ -14,7 +14,7 @@ class HomeController extends Controller
         $community = Community::query()->where('slug', 'auckland-m8s')->first();
 
         $events = $community
-            ? $community->events()->with('community')->published()->upcoming()->get()
+            ? $community->events()->with(['community', 'rsvps.user'])->published()->upcoming()->limit(6)->get()
             : collect();
 
         return Inertia::render('Welcome', [

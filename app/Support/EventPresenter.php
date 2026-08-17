@@ -25,6 +25,9 @@ class EventPresenter
             'description' => $event->description,
             'starts_at' => $event->starts_at->toIso8601String(),
             'starts_at_label' => $event->starts_at->timezone('Pacific/Auckland')->format('D j M · g:ia'),
+            'weekday' => $event->starts_at->timezone('Pacific/Auckland')->format('D'),
+            'date_label' => $event->starts_at->timezone('Pacific/Auckland')->format('j M'),
+            'time_label' => $event->starts_at->timezone('Pacific/Auckland')->format('g:ia'),
             'ends_at' => $event->ends_at?->toIso8601String(),
             'venue_name' => $event->venue_name,
             'venue_address' => $event->venue_address,
@@ -44,6 +47,15 @@ class EventPresenter
             'is_full' => $event->isFull(),
             'has_ended' => $event->hasEnded(),
             'has_started' => $event->hasStarted(),
+            'faces' => $event->confirmedRsvps()
+                ->with('user')
+                ->limit(5)
+                ->get()
+                ->map(fn (Rsvp $rsvp) => [
+                    'initials' => mb_strtoupper(mb_substr($rsvp->user->name, 0, 1)),
+                ])
+                ->values()
+                ->all(),
             'url' => route('events.show', [$event->community->slug, $event->slug]),
             'community' => [
                 'id' => $event->community->id,

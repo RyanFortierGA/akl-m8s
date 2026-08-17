@@ -6,7 +6,7 @@ A club for making mates through real-life events. Run Auckland first. White-labe
 
 Laravel 13, Vue 3, Inertia, Tailwind, SQLite, Stripe Checkout.
 
-## Run it
+## Run it locally
 
 ```bash
 composer install
@@ -20,7 +20,27 @@ composer dev
 
 Then open [http://localhost:8000](http://localhost:8000)
 
-## Admin login
+## Seed the admin account on Forge
+
+SSH into the site (Forge → the site → Commands, or SSH as `forge` into the site folder), then:
+
+```bash
+php artisan m8s:setup --email=you@aklm8s.nz --password='pick-a-strong-one'
+```
+
+That creates your admin user, the Auckland M8s club, and sample nights you can edit in `/admin`. It is safe to run again — it will not wipe nights you have already edited.
+
+If you already ran migrations and just want the demo data:
+
+```bash
+php artisan db:seed --force
+```
+
+Default seed login is `ryan@aklm8s.nz` / `password` unless you set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in the Forge environment.
+
+Then go to `https://your-domain/login`. Admins land on `/admin`.
+
+## Admin login (local)
 
 Password for both: `password`
 
@@ -36,10 +56,6 @@ From `/admin` you can create events, attach a Stripe product, and see signup / w
 3. Edit the event in admin and pick that product from the dropdown, or paste a `price_...` id.
 
 Checkout charges that Price. Without Stripe keys, events still work with a NZD price and local checkout.
-
-## First nights
-
-The seed already has Auckland M8s plus football, bowling, and a bar night.
 
 ## What is in this version
 
