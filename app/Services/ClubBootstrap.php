@@ -163,6 +163,10 @@ class ClubBootstrap
                 'suburb' => 'Mt Eden',
                 'capacity' => 20,
                 'price_cents' => 1500,
+                'venue_cost_cents' => 18000,
+                'host_cost_cents' => 2000,
+                'other_cost_cents' => 0,
+                'cost_notes' => 'Pitch hire + balls',
             ],
             [
                 'slug' => 'bowling-night',
@@ -176,6 +180,10 @@ class ClubBootstrap
                 'suburb' => 'Grey Lynn',
                 'capacity' => 16,
                 'price_cents' => 2500,
+                'venue_cost_cents' => 28000,
+                'host_cost_cents' => 0,
+                'other_cost_cents' => 4000,
+                'cost_notes' => 'Lanes + shoes',
             ],
             [
                 'slug' => 'sunday-hoops',
@@ -189,6 +197,10 @@ class ClubBootstrap
                 'suburb' => 'Freemans Bay',
                 'capacity' => 16,
                 'price_cents' => 0,
+                'venue_cost_cents' => 0,
+                'host_cost_cents' => 0,
+                'other_cost_cents' => 0,
+                'cost_notes' => 'Free public courts',
             ],
             [
                 'slug' => 'pints-and-pool',
@@ -202,6 +214,10 @@ class ClubBootstrap
                 'suburb' => 'Ponsonby',
                 'capacity' => 18,
                 'price_cents' => 1000,
+                'venue_cost_cents' => 0,
+                'host_cost_cents' => 5000,
+                'other_cost_cents' => 3000,
+                'cost_notes' => 'Table hold + first round float',
             ],
             [
                 'slug' => 'friday-bar-night',
@@ -215,6 +231,10 @@ class ClubBootstrap
                 'suburb' => 'K Road',
                 'capacity' => 24,
                 'price_cents' => 1000,
+                'venue_cost_cents' => 0,
+                'host_cost_cents' => 6000,
+                'other_cost_cents' => 4000,
+                'cost_notes' => 'Quiz + welcome drinks',
             ],
             [
                 'slug' => 'first-football-night',
@@ -228,6 +248,10 @@ class ClubBootstrap
                 'suburb' => 'Mt Eden',
                 'capacity' => 20,
                 'price_cents' => 1500,
+                'venue_cost_cents' => 18000,
+                'host_cost_cents' => 2000,
+                'other_cost_cents' => 0,
+                'cost_notes' => 'Pitch hire + balls',
             ],
         ];
 
@@ -249,6 +273,10 @@ class ClubBootstrap
                     'suburb' => $event['suburb'],
                     'capacity' => $event['capacity'],
                     'price_cents' => $event['price_cents'],
+                    'venue_cost_cents' => $event['venue_cost_cents'],
+                    'host_cost_cents' => $event['host_cost_cents'],
+                    'other_cost_cents' => $event['other_cost_cents'],
+                    'cost_notes' => $event['cost_notes'],
                     'status' => Event::STATUS_PUBLISHED,
                 ],
             );

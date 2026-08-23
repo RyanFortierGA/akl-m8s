@@ -7,6 +7,7 @@ use App\Models\Community;
 use App\Models\Connection;
 use App\Models\Event;
 use App\Models\Rsvp;
+use App\Support\EventBudget;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,6 +27,11 @@ class DashboardController extends Controller
             ->whereIn('status', [Rsvp::STATUS_CONFIRMED, Rsvp::STATUS_ATTENDED])
             ->get();
 
+        $totalCost = (int) $events->sum(fn (Event $event) => $event->totalCostCents());
+        $revenue = (int) $confirmed->sum('amount_paid_cents');
+        $fees = (int) $confirmed->sum('platform_fee_cents');
+        $profit = ($revenue - $fees) - $totalCost;
+
         return Inertia::render('admin/Dashboard', [
             'community' => [
                 'name' => $community->name,
@@ -37,7 +43,10 @@ class DashboardController extends Controller
                 'upcoming_nights' => $upcoming->count(),
                 'signups' => $confirmed->count(),
                 'waitlist' => Rsvp::query()->whereIn('event_id', $eventIds)->where('status', Rsvp::STATUS_WAITLISTED)->count(),
-                'ticket_sales_label' => '$'.number_format($confirmed->sum('amount_paid_cents') / 100, 0),
+                'ticket_sales_label' => EventBudget::money($revenue),
+                'cost_label' => EventBudget::money($totalCost),
+                'profit_label' => EventBudget::money($profit),
+                'is_profitable' => $profit >= 0,
                 'connections' => Connection::query()->whereIn('event_id', $eventIds)->count(),
             ],
             'upcoming' => $upcoming->map(fn (Event $event) => $this->eventRow($event))->all(),
@@ -50,6 +59,8 @@ class DashboardController extends Controller
      */
     private function eventRow(Event $event): array
     {
+        $budget = EventBudget::for($event);
+
         return [
             'id' => $event->id,
             'title' => $event->title,
@@ -60,7 +71,10 @@ class DashboardController extends Controller
             'capacity' => $event->capacity,
             'waitlist' => $event->waitlistCount(),
             'pending' => $event->pendingPaymentCount(),
-            'revenue_cents' => (int) $event->confirmedRsvps()->sum('amount_paid_cents'),
+            'revenue_cents' => $budget['revenue_cents'],
+            'profit_label' => $budget['profit_label'],
+            'is_profitable' => $budget['is_profitable'],
+            'break_even_tickets' => $budget['break_even_tickets'],
             'price_label' => $event->formattedPrice(),
             'stripe_product_name' => $event->stripe_product_name,
             'stripe_price_id' => $event->stripe_price_id,

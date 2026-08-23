@@ -32,6 +32,10 @@ class Event extends Model
         'suburb',
         'capacity',
         'price_cents',
+        'venue_cost_cents',
+        'host_cost_cents',
+        'other_cost_cents',
+        'cost_notes',
         'stripe_product_id',
         'stripe_price_id',
         'stripe_product_name',
@@ -55,7 +59,17 @@ class Event extends Model
             'ends_at' => 'datetime',
             'capacity' => 'integer',
             'price_cents' => 'integer',
+            'venue_cost_cents' => 'integer',
+            'host_cost_cents' => 'integer',
+            'other_cost_cents' => 'integer',
         ];
+    }
+
+    public function totalCostCents(): int
+    {
+        return (int) $this->venue_cost_cents
+            + (int) $this->host_cost_cents
+            + (int) $this->other_cost_cents;
     }
 
     /** @return BelongsTo<Community, $this> */

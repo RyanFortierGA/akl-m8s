@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Rsvp;
 use App\Models\User;
 use App\Services\StripeCatalogService;
+use App\Support\EventBudget;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -25,6 +26,7 @@ class EventController extends Controller
             'event' => null,
             'stripeConfigured' => $this->stripe->configured(),
             'stripePrices' => $this->stripe->prices($request->boolean('refresh')),
+            'feePercent' => (int) $this->auckland()->platform_fee_percent,
         ]);
     }
 
@@ -52,6 +54,7 @@ class EventController extends Controller
             'event' => $this->formEvent($event),
             'stripeConfigured' => $this->stripe->configured(),
             'stripePrices' => $this->stripe->prices($request->boolean('refresh')),
+            'feePercent' => (int) $this->auckland()->platform_fee_percent,
         ]);
     }
 
@@ -103,6 +106,7 @@ class EventController extends Controller
                 'public_url' => route('events.show', [$event->community->slug, $event->slug]),
                 'edit_url' => route('admin.events.edit', $event),
             ],
+            'budget' => EventBudget::for($event),
             'signups' => $people->whereIn('status', [Rsvp::STATUS_CONFIRMED, Rsvp::STATUS_ATTENDED])->values()->all(),
             'waitlist' => $people->where('status', Rsvp::STATUS_WAITLISTED)->values()->all(),
             'pending' => $people->where('status', Rsvp::STATUS_PENDING)->values()->all(),
@@ -136,6 +140,10 @@ class EventController extends Controller
             'suburb' => ['nullable', 'string', 'max:80'],
             'capacity' => ['required', 'integer', 'min:2', 'max:200'],
             'price' => ['nullable', 'numeric', 'min:0'],
+            'venue_cost' => ['nullable', 'numeric', 'min:0'],
+            'host_cost' => ['nullable', 'numeric', 'min:0'],
+            'other_cost' => ['nullable', 'numeric', 'min:0'],
+            'cost_notes' => ['nullable', 'string', 'max:1000'],
             'stripe_price_id' => ['nullable', 'string', 'max:80'],
         ]);
 
@@ -149,6 +157,10 @@ class EventController extends Controller
             'suburb' => $validated['suburb'] ?? 'Auckland',
             'capacity' => $validated['capacity'],
             'price_cents' => (int) round(((float) ($validated['price'] ?? 0)) * 100),
+            'venue_cost_cents' => (int) round(((float) ($validated['venue_cost'] ?? 0)) * 100),
+            'host_cost_cents' => (int) round(((float) ($validated['host_cost'] ?? 0)) * 100),
+            'other_cost_cents' => (int) round(((float) ($validated['other_cost'] ?? 0)) * 100),
+            'cost_notes' => $validated['cost_notes'] ?? null,
         ]);
 
         $this->stripe->attachToEvent($event, $validated['stripe_price_id'] ?? null);
@@ -170,6 +182,10 @@ class EventController extends Controller
             'suburb' => $event->suburb,
             'capacity' => $event->capacity,
             'price' => $event->price_cents / 100,
+            'venue_cost' => $event->venue_cost_cents / 100,
+            'host_cost' => $event->host_cost_cents / 100,
+            'other_cost' => $event->other_cost_cents / 100,
+            'cost_notes' => $event->cost_notes,
             'stripe_price_id' => $event->stripe_price_id,
             'stripe_product_name' => $event->stripe_product_name,
         ];

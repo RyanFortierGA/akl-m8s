@@ -49,6 +49,11 @@ Password for both: `password`
 
 From `/admin` you can create events, attach a Stripe product, and see signup / waitlist counts.
 
+Admin also has:
+- **Planner** (`/admin/planner`) — month calendar with fill + profit
+- **People** (`/admin/people`) — all members, suburbs, who comes back
+- **Budget** on each event — venue / host / other costs, live break-even, profit vs loss
+
 ## Stripe products
 
 1. In Stripe Dashboard, create a Product and a one-time Price (e.g. Friday Football $15 NZD).

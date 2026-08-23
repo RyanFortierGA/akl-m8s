@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Admin\PeopleController as AdminPeopleController;
+use App\Http\Controllers\Admin\PlannerController as AdminPlannerController;
 use App\Http\Controllers\ContactCardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
@@ -44,6 +46,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', AdminDashboardController::class)->name('dashboard');
+    Route::get('/planner', AdminPlannerController::class)->name('planner');
+    Route::get('/people', AdminPeopleController::class)->name('people');
     Route::get('/events/new', [AdminEventController::class, 'create'])->name('events.create');
     Route::post('/events', [AdminEventController::class, 'store'])->name('events.store');
     Route::get('/events/{event}', [AdminEventController::class, 'show'])->name('events.show');
