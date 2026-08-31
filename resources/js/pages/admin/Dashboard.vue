@@ -26,9 +26,12 @@ type EventRow = {
 
 defineProps<{
     community: { name: string; member_count: number };
+    prelaunch: boolean;
+    launchLabel: string;
     stripeConfigured: boolean;
     stats: {
         members: number;
+        club_waitlist: number;
         upcoming_nights: number;
         signups: number;
         waitlist: number;
@@ -66,6 +69,14 @@ defineProps<{
         </p>
 
         <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <Link
+                href="/admin/waitlist"
+                class="rounded-2xl border bg-card p-4 transition hover:border-primary"
+            >
+                <div class="text-sm text-muted-foreground">Club waitlist</div>
+                <div class="text-3xl font-black">{{ stats.club_waitlist }}</div>
+                <div v-if="prelaunch" class="mt-1 text-xs text-primary">Launching {{ launchLabel }}</div>
+            </Link>
             <div class="rounded-2xl border bg-card p-4">
                 <div class="text-sm text-muted-foreground">Upcoming</div>
                 <div class="text-3xl font-black">{{ stats.upcoming_nights }}</div>
@@ -75,7 +86,7 @@ defineProps<{
                 <div class="text-3xl font-black">{{ stats.signups }}</div>
             </div>
             <div class="rounded-2xl border bg-card p-4">
-                <div class="text-sm text-muted-foreground">Waitlist</div>
+                <div class="text-sm text-muted-foreground">Event full</div>
                 <div class="text-3xl font-black">{{ stats.waitlist }}</div>
             </div>
             <div class="rounded-2xl border bg-card p-4">

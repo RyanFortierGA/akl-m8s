@@ -50,7 +50,7 @@ class PrelaunchTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Welcome')
                 ->has('events', 0)
-                ->where('waitlistCount', 1));
+                ->where('waitlistCount', 0));
     }
 
     public function test_public_event_pages_are_hidden_during_prelaunch(): void

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Community;
 use App\Support\Auckland;
 use App\Support\EventPresenter;
+use App\Support\Waitlist;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,7 +23,7 @@ class HomeController extends Controller
             'community' => $community ? EventPresenter::communityCard($community) : null,
             'events' => Auckland::prelaunch() ? [] : EventPresenter::collection($events),
             'regularNights' => Auckland::regularNights($community),
-            'waitlistCount' => $community?->members()->count() ?? 0,
+            'waitlistCount' => Waitlist::count(),
         ]);
     }
 }

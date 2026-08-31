@@ -7,7 +7,9 @@ use App\Models\Community;
 use App\Models\Connection;
 use App\Models\Event;
 use App\Models\Rsvp;
+use App\Support\Auckland;
 use App\Support\EventBudget;
+use App\Support\Waitlist;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -37,9 +39,12 @@ class DashboardController extends Controller
                 'name' => $community->name,
                 'member_count' => $community->members()->count(),
             ],
+            'prelaunch' => Auckland::prelaunch(),
+            'launchLabel' => Auckland::launchLabel(),
             'stripeConfigured' => filled(config('services.stripe.secret')),
             'stats' => [
                 'members' => $community->members()->count(),
+                'club_waitlist' => Waitlist::count(),
                 'upcoming_nights' => $upcoming->count(),
                 'signups' => $confirmed->count(),
                 'waitlist' => Rsvp::query()->whereIn('event_id', $eventIds)->where('status', Rsvp::STATUS_WAITLISTED)->count(),

@@ -137,13 +137,8 @@ function tone(event: EventCard) {
                 Upcoming nights
             </Link>
 
-            <p class="text-sm text-[#1E2C2A]/55">
-                <template v-if="prelaunch">
-                    {{ waitlistCount }} on the waitlist
-                </template>
-                <template v-else>
-                    {{ community?.member_count ?? 0 }} members in Auckland
-                </template>
+            <p v-if="!prelaunch" class="text-sm text-[#1E2C2A]/55">
+                {{ community?.member_count ?? 0 }} members in Auckland
             </p>
         </div>
     </section>
@@ -335,7 +330,6 @@ function tone(event: EventCard) {
             <p class="mx-auto mt-4 max-w-xl text-[#1E2C2A]/65">
                 <template v-if="prelaunch">
                     Join the waitlist and we will email you when bookings open.
-                    {{ waitlistCount }} guys already signed up.
                 </template>
                 <template v-else>
                     We mix the room on purpose. New in Auckland, between friend groups, or just sick of organising it yourself.

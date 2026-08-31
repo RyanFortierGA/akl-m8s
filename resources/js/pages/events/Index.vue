@@ -42,7 +42,6 @@ const launchLabel = computed(() => club.value.launchLabel);
                 We are lining up footy, pub quizzes, padel, game nights, and more across Auckland.
                 Sign up now and we will let you know when bookings open.
             </p>
-            <p class="mt-4 text-sm text-muted-foreground">{{ waitlistCount }} on the waitlist</p>
             <Link
                 :href="user ? '/dashboard' : '/register'"
                 class="mt-6 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"

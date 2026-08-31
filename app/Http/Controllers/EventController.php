@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\EventMessage;
 use App\Support\Auckland;
 use App\Support\EventPresenter;
+use App\Support\Waitlist;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,7 +22,7 @@ class EventController extends Controller
         if (Auckland::prelaunch()) {
             return Inertia::render('events/Index', [
                 'events' => [],
-                'waitlistCount' => $community?->members()->count() ?? 0,
+                'waitlistCount' => Waitlist::count(),
             ]);
         }
 
@@ -29,7 +30,7 @@ class EventController extends Controller
 
         return Inertia::render('events/Index', [
             'events' => EventPresenter::collection($events),
-            'waitlistCount' => $community?->members()->count() ?? 0,
+            'waitlistCount' => Waitlist::count(),
         ]);
     }
 

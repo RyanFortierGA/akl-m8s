@@ -2,11 +2,12 @@
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps<{
-    active: 'dashboard' | 'planner' | 'people';
+    active: 'dashboard' | 'planner' | 'people' | 'waitlist';
 }>();
 
 const links = [
     { key: 'dashboard', href: '/admin', label: 'Overview' },
+    { key: 'waitlist', href: '/admin/waitlist', label: 'Waitlist' },
     { key: 'planner', href: '/admin/planner', label: 'Planner' },
     { key: 'people', href: '/admin/people', label: 'People' },
 ] as const;
