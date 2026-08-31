@@ -28,47 +28,53 @@ return [
         'Balmoral',
         'Onehunga',
         'Henderson',
+        'Titirangi',
         'North Shore',
     ],
 
     /*
-    | Regular night series — pick one when creating an event in admin.
+    | Regular night series. Pick one when creating an event in admin.
     */
     'series' => [
         'football' => [
-            'label' => 'Footy night',
+            'label' => 'Footy',
             'emoji' => '⚽',
-            'blurb' => '5-a-side, every week. Show up solo or bring a mate.',
+            'blurb' => '5-a-side every week. Show up solo or bring a mate.',
         ],
-        'mtg' => [
-            'label' => 'MTG night',
-            'emoji' => '🃏',
-            'blurb' => 'Commander and casual drafts. Cards optional your first time.',
-        ],
-        'trivia' => [
-            'label' => 'Trivia night',
+        'quiz' => [
+            'label' => 'Pub quizzes',
             'emoji' => '🧠',
-            'blurb' => 'Pub quiz tables. We mix the teams so nobody sits with the same crew.',
+            'blurb' => 'Quiz tables at the pub. We mix teams so nobody sits with the same crew.',
+        ],
+        'padel' => [
+            'label' => 'Padel',
+            'emoji' => '🎾',
+            'blurb' => 'Courts booked, groups rotated. Fine if you have never played before.',
+        ],
+        'games' => [
+            'label' => 'Game nights',
+            'emoji' => '🎲',
+            'blurb' => 'Board games, cards, consoles. Drop in even if you do not know the rules.',
         ],
         'bowling' => [
-            'label' => 'Bowling night',
+            'label' => 'Bowling',
             'emoji' => '🎳',
             'blurb' => 'Lanes booked, shoes sorted. Easy night if sport is not your thing.',
         ],
-        'bar' => [
-            'label' => 'Bar night',
-            'emoji' => '🍻',
-            'blurb' => 'Corner table, a few rounds, actual conversation.',
+        'golf' => [
+            'label' => 'Golf outings',
+            'emoji' => '⛳',
+            'blurb' => 'Nine holes or the range. Mixed ability, no low-handicap gatekeeping.',
         ],
-        'pool' => [
-            'label' => 'Pool night',
-            'emoji' => '🎱',
-            'blurb' => 'Tables in Ponsonby. Grab a pint, get rotated onto a game.',
+        'running' => [
+            'label' => 'Running groups',
+            'emoji' => '🏃',
+            'blurb' => 'Group runs around the city. Pace groups so nobody gets dropped.',
         ],
-        'hoops' => [
-            'label' => 'Hoops run',
-            'emoji' => '🏀',
-            'blurb' => 'Sunday run at the park. Mixed ability, short games.',
+        'hiking' => [
+            'label' => 'Hiking trips',
+            'emoji' => '🥾',
+            'blurb' => 'Weekend trails outside Auckland. Car pools sorted on the day.',
         ],
     ],
 

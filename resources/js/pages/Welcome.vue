@@ -63,11 +63,12 @@ function tone(event: EventCard) {
     const map: Record<string, string> = {
         '⚽': 'bg-[#2F5C57] text-[#F3ECE3]',
         '🎳': 'bg-[#C45C26] text-[#F6EFE6]',
-        '🏀': 'bg-[#8C4A2F] text-[#F6EFE6]',
-        '🎱': 'bg-[#1E2C2A] text-[#F3ECE3]',
-        '🍻': 'bg-[#A9783C] text-[#F6EFE6]',
-        '🃏': 'bg-[#3D4F3A] text-[#F3ECE3]',
+        '🏃': 'bg-[#8C4A2F] text-[#F6EFE6]',
+        '🎾': 'bg-[#3D5C3A] text-[#F3ECE3]',
+        '⛳': 'bg-[#3D6B4F] text-[#F3ECE3]',
+        '🎲': 'bg-[#5C4A72] text-[#F6EFE6]',
         '🧠': 'bg-[#5C4A72] text-[#F6EFE6]',
+        '🥾': 'bg-[#6B5A3E] text-[#F6EFE6]',
     };
 
     return map[event.emoji] ?? 'bg-[#2F5C57] text-[#F3ECE3]';
@@ -96,11 +97,11 @@ function tone(event: EventCard) {
 
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-[#1E2C2A]/72">
             <template v-if="prelaunch">
-                Footy, trivia, MTG, bar nights. We are lining up venues and regular nights across Auckland.
+                Footy, pub quizzes, padel, game nights, and more. We are lining up venues and regular nights across Auckland.
                 Sign up now and we will let you know when bookings open.
             </template>
             <template v-else>
-                Footy, trivia, MTG, bar nights. Organised so you just book in and turn up.
+                Footy, pub quizzes, padel, game nights, and more. Organised so you just book in and turn up.
                 Solo or with mates. Both work here.
             </template>
         </p>
@@ -302,7 +303,7 @@ function tone(event: EventCard) {
             <p class="text-sm text-[#C45C26]">01</p>
             <h3 class="mt-3 font-serif text-2xl font-medium">Pick a night</h3>
             <p class="mt-3 text-sm leading-relaxed text-[#1E2C2A]/70">
-                Footy, trivia, MTG, bowling, bar tables. Small enough that you are not lost in a crowd.
+                Footy, pub quizzes, padel, bowling, golf, runs, hikes. Small enough that you are not lost in a crowd.
             </p>
         </article>
         <article class="rounded-3xl bg-[#F8F3EC] p-6">

@@ -39,7 +39,7 @@ const launchLabel = computed(() => club.value.launchLabel);
             <p class="text-sm font-medium text-[#C45C26]">Events starting in {{ launchLabel }}!</p>
             <h1 class="mt-2 text-3xl font-black">Join the waitlist</h1>
             <p class="mt-2 max-w-lg text-muted-foreground">
-                We are lining up footy, trivia, MTG, and bar nights across Auckland.
+                We are lining up footy, pub quizzes, padel, game nights, and more across Auckland.
                 Sign up now and we will let you know when bookings open.
             </p>
             <p class="mt-4 text-sm text-muted-foreground">{{ waitlistCount }} on the waitlist</p>
