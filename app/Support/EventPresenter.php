@@ -32,6 +32,10 @@ class EventPresenter
             'venue_name' => $event->venue_name,
             'venue_address' => $event->venue_address,
             'suburb' => $event->suburb,
+            'series' => $event->series,
+            'series_label' => $event->series
+                ? (Auckland::seriesCatalog()[$event->series]['label'] ?? null)
+                : null,
             'capacity' => $event->capacity,
             'price_cents' => $event->price_cents,
             'price_label' => $event->formattedPrice(),

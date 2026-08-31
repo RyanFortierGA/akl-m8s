@@ -2,6 +2,7 @@
 import { Form, Head, Link } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
 import AdminNav from '@/components/AdminNav.vue';
+import SuburbSelect from '@/components/SuburbSelect.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +16,13 @@ type StripePrice = {
     currency: string;
 };
 
+type SeriesOption = {
+    key: string;
+    label: string;
+    emoji: string;
+    blurb: string;
+};
+
 type EventForm = {
     id: number;
     title: string;
@@ -24,6 +32,7 @@ type EventForm = {
     venue_name: string;
     venue_address: string | null;
     suburb: string | null;
+    series: string | null;
     capacity: number;
     price: number;
     venue_cost: number;
@@ -39,18 +48,23 @@ const props = defineProps<{
     stripeConfigured: boolean;
     stripePrices: StripePrice[];
     feePercent: number;
+    seriesOptions: SeriesOption[];
 }>();
 
 const selectedPrice = ref(props.event?.stripe_price_id ?? '');
+const selectedSeries = ref(props.event?.series ?? '');
 const price = ref(props.event?.price?.toString() ?? '15');
 const capacity = ref(props.event?.capacity?.toString() ?? '20');
 const venueCost = ref(props.event?.venue_cost?.toString() ?? '0');
 const hostCost = ref(props.event?.host_cost?.toString() ?? '0');
 const otherCost = ref(props.event?.other_cost?.toString() ?? '0');
 
-const selected = computed(() =>
-    props.stripePrices.find((item) => item.price_id === selectedPrice.value) ?? null,
-);
+watch(selectedSeries, (key) => {
+    const match = props.seriesOptions.find((item) => item.key === key);
+    if (match && !props.event) {
+        // Only auto-fill on create so edits stay intentional.
+    }
+});
 
 watch(selectedPrice, (value) => {
     const match = props.stripePrices.find((item) => item.price_id === value);
@@ -102,15 +116,32 @@ function money(n: number) {
             <Link href="/admin" class="text-sm text-primary">Back to admin</Link>
             <h1 class="mt-3 text-3xl font-black">{{ editing ? 'Edit event' : 'Create a night' }}</h1>
             <p class="mt-2 text-muted-foreground">
-                Set the ticket, costs, and capacity — break-even updates as you type.
+                Set the ticket, costs, and capacity. Break-even updates as you type.
             </p>
         </div>
 
         <Form
             :action="action"
             :method="editing ? 'put' : 'post'"
-            class="space-y-4"
+            class="space-y-5"
         >
+            <div>
+                <Label>Regular night</Label>
+                <select
+                    v-model="selectedSeries"
+                    name="series"
+                    class="mt-1 w-full rounded-md border bg-background px-3 py-2"
+                >
+                    <option value="">One-off / special</option>
+                    <option v-for="item in seriesOptions" :key="item.key" :value="item.key">
+                        {{ item.emoji }} {{ item.label }}
+                    </option>
+                </select>
+                <p v-if="seriesOptions.find((item) => item.key === selectedSeries)?.blurb" class="mt-1 text-xs text-muted-foreground">
+                    {{ seriesOptions.find((item) => item.key === selectedSeries)?.blurb }}
+                </p>
+            </div>
+
             <div class="grid grid-cols-4 gap-3">
                 <div>
                     <Label>Emoji</Label>
@@ -128,7 +159,7 @@ function money(n: number) {
                     name="description"
                     class="mt-1 min-h-28 w-full rounded-md border bg-background px-3 py-2"
                     :default-value="event?.description ?? ''"
-                    placeholder="Come alone — most people are."
+                    placeholder="Pitch booked, teams mixed. Solo or with a mate."
                 />
             </div>
 
@@ -147,7 +178,7 @@ function money(n: number) {
                 </div>
                 <div>
                     <Label>Suburb</Label>
-                    <Input name="suburb" :default-value="event?.suburb ?? ''" placeholder="Mt Eden" />
+                    <SuburbSelect :default-value="event?.suburb" required />
                 </div>
             </div>
             <div>
@@ -167,7 +198,7 @@ function money(n: number) {
                     v-model="selectedPrice"
                     class="w-full rounded-md border bg-background px-3 py-2"
                 >
-                    <option value="">No Stripe product — use the price below</option>
+                    <option value="">No Stripe product (use price below)</option>
                     <option v-for="item in stripePrices" :key="item.price_id" :value="item.price_id">
                         {{ item.product_name }} · {{ item.amount_label }} {{ item.currency }}
                     </option>
@@ -205,7 +236,7 @@ function money(n: number) {
                 </div>
                 <div>
                     <Label>Cost notes</Label>
-                    <Input name="cost_notes" :default-value="event?.cost_notes ?? ''" placeholder="Pitch hire, balls, drinks…" />
+                    <Input name="cost_notes" :default-value="event?.cost_notes ?? ''" placeholder="Pitch hire, balls, drinks" />
                 </div>
 
                 <div class="grid gap-2 rounded-xl bg-muted/50 p-3 text-sm">

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Form, Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Form, Head, usePage } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import TextLink from '@/components/TextLink.vue';
@@ -16,10 +17,12 @@ defineProps<{
 
 defineOptions({
     layout: {
-        title: 'Create an account',
-        description: 'Enter your details below to create your account',
+        title: 'Join the waitlist',
+        description: 'Events start in October. Sign up and we will let you know when bookings open.',
     },
 });
+
+const prelaunch = computed(() => (usePage().props.club as { prelaunch: boolean } | undefined)?.prelaunch ?? true);
 </script>
 
 <template>
@@ -97,7 +100,7 @@ defineOptions({
                 data-test="register-user-button"
             >
                 <Spinner v-if="processing" />
-                Create account
+                {{ prelaunch ? 'Join the waitlist' : 'Create account' }}
             </Button>
         </div>
 

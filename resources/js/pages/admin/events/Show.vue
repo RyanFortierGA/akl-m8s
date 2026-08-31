@@ -156,7 +156,7 @@ function money(cents: number) {
                         <div class="font-semibold">{{ person.name }}</div>
                         <div class="text-sm text-muted-foreground">
                             {{ person.email }} · {{ person.suburb || 'Auckland' }} ·
-                            {{ person.coming_alone ? 'alone' : 'with a mate' }}
+                            {{ person.coming_alone ? 'solo' : 'with a mate' }}
                         </div>
                     </div>
                     <div class="flex gap-3 text-sm">

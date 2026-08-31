@@ -6,6 +6,7 @@ use App\Models\Connection;
 use App\Models\Event;
 use App\Models\Rsvp;
 use App\Models\User;
+use App\Support\Auckland;
 use App\Support\EventPresenter;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -36,12 +37,14 @@ class DashboardController extends Controller
             ->limit(8)
             ->get();
 
-        $discover = Event::query()
-            ->with('community')
-            ->published()
-            ->upcoming()
-            ->limit(6)
-            ->get();
+        $discover = Auckland::prelaunch()
+            ? collect()
+            : Event::query()
+                ->with('community')
+                ->published()
+                ->upcoming()
+                ->limit(6)
+                ->get();
 
         $mates = Connection::query()
             ->with(['mate', 'event.community'])

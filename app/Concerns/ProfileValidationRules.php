@@ -3,6 +3,7 @@
 namespace App\Concerns;
 
 use App\Models\User;
+use App\Support\Auckland;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +20,7 @@ trait ProfileValidationRules
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
             'age' => ['nullable', 'integer', 'min:18', 'max:99'],
-            'suburb' => ['nullable', 'string', 'max:80'],
+            'suburb' => Auckland::suburbRules(),
             'instagram' => ['nullable', 'string', 'max:80'],
             'phone' => ['nullable', 'string', 'max:40'],
             'bio' => ['nullable', 'string', 'max:400'],

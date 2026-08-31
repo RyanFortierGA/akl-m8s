@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Community;
 use App\Models\Event;
 use App\Models\EventMessage;
+use App\Support\Auckland;
 use App\Support\EventPresenter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,15 +16,27 @@ class EventController extends Controller
 {
     public function index(): Response
     {
+        $community = Community::query()->where('slug', 'auckland-m8s')->first();
+
+        if (Auckland::prelaunch()) {
+            return Inertia::render('events/Index', [
+                'events' => [],
+                'waitlistCount' => $community?->members()->count() ?? 0,
+            ]);
+        }
+
         $events = Event::query()->with('community')->published()->upcoming()->get();
 
         return Inertia::render('events/Index', [
             'events' => EventPresenter::collection($events),
+            'waitlistCount' => $community?->members()->count() ?? 0,
         ]);
     }
 
     public function show(string $community, string $event, Request $request): Response
     {
+        $this->guardPrelaunch($request);
+
         $record = $this->findEvent($community, $event);
 
         return Inertia::render('events/Show', [
@@ -37,6 +50,8 @@ class EventController extends Controller
 
     public function chat(string $community, string $event, Request $request): Response
     {
+        $this->guardPrelaunch($request);
+
         $record = $this->findEvent($community, $event);
         abort_unless($this->canAccessEvent($request, $record), 403);
 
@@ -63,6 +78,8 @@ class EventController extends Controller
 
     public function storeMessage(string $community, string $event, Request $request): RedirectResponse
     {
+        $this->guardPrelaunch($request);
+
         $record = $this->findEvent($community, $event);
         abort_unless($this->canAccessEvent($request, $record), 403);
 
@@ -76,6 +93,19 @@ class EventController extends Controller
         ]);
 
         return back();
+    }
+
+    private function guardPrelaunch(Request $request): void
+    {
+        if (! Auckland::prelaunch()) {
+            return;
+        }
+
+        if ($request->user()?->isAdmin()) {
+            return;
+        }
+
+        abort(404);
     }
 
     private function findEvent(string $community, string $event): Event

@@ -30,6 +30,7 @@ class Event extends Model
         'venue_name',
         'venue_address',
         'suburb',
+        'series',
         'capacity',
         'price_cents',
         'venue_cost_cents',

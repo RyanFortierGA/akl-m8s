@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
             <div>
                 <p class="text-sm font-semibold tracking-widest text-primary uppercase">Admin</p>
                 <h1 class="text-3xl font-black">People</h1>
-                <p class="text-muted-foreground">Everyone in Auckland M8s — who shows up, who comes back.</p>
+                <p class="text-muted-foreground">Everyone in Auckland M8s. Who shows up, who comes back.</p>
             </div>
             <AdminNav active="people" />
         </div>
@@ -124,7 +124,7 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
                 <div class="text-xs text-muted-foreground">
-                    Joined {{ person.joined_at || '—' }}
+                    Joined {{ person.joined_at || 'unknown' }}
                 </div>
             </div>
             <div v-if="!people.length" class="p-6 text-sm text-muted-foreground">

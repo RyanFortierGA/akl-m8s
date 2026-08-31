@@ -6,6 +6,7 @@ import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileCo
 import DeleteUser from '@/components/DeleteUser.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
+import SuburbSelect from '@/components/SuburbSelect.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -76,7 +77,7 @@ const user = computed(() => page.props.auth.user);
             <div class="grid gap-2 sm:grid-cols-2">
                 <div class="grid gap-2">
                     <Label for="suburb">Suburb</Label>
-                    <Input id="suburb" name="suburb" :default-value="user.suburb ?? ''" placeholder="Ponsonby" />
+                    <SuburbSelect name="suburb" :default-value="user.suburb" />
                 </div>
                 <div class="grid gap-2">
                     <Label for="instagram">Instagram</Label>

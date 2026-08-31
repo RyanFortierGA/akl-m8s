@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Community;
 use App\Models\Interest;
+use App\Support\Auckland;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,7 +29,7 @@ class OnboardingController extends Controller
     {
         $validated = $request->validate([
             'age' => ['nullable', 'integer', 'min:18', 'max:99'],
-            'suburb' => ['nullable', 'string', 'max:80'],
+            'suburb' => Auckland::suburbRules(),
             'instagram' => ['nullable', 'string', 'max:80'],
             'phone' => ['nullable', 'string', 'max:40'],
             'interest_ids' => ['array'],
@@ -43,7 +45,7 @@ class OnboardingController extends Controller
 
         $request->user()->interests()->sync($validated['interest_ids'] ?? []);
 
-        $default = \App\Models\Community::query()->where('slug', 'auckland-m8s')->first();
+        $default = Community::query()->where('slug', 'auckland-m8s')->first();
         $default?->addMember($request->user());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Profile saved. Grab a spot.']);

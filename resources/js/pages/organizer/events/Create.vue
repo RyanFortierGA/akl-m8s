@@ -37,7 +37,7 @@ defineProps<{
                 <textarea
                     name="description"
                     class="mt-1 min-h-28 w-full rounded-md border bg-background px-3 py-2"
-                    placeholder="Come alone — most people are."
+                    placeholder="Flying solo is normal here. Most people are."
                 />
             </div>
             <div>

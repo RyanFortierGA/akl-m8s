@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
+import SuburbSelect from '@/components/SuburbSelect.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -28,7 +29,7 @@ defineProps<{
                 </div>
                 <div>
                     <Label>Suburb</Label>
-                    <Input name="suburb" :default-value="profile.suburb ?? ''" placeholder="Ponsonby" />
+                    <SuburbSelect :default-value="profile.suburb" />
                 </div>
                 <div>
                     <Label>Instagram</Label>

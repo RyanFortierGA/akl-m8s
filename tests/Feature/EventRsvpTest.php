@@ -12,6 +12,13 @@ class EventRsvpTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config(['auckland.prelaunch' => false]);
+    }
+
     public function test_a_member_can_reserve_a_free_event(): void
     {
         $organizer = User::factory()->create();

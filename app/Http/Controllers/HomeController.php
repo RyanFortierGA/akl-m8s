@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Community;
+use App\Support\Auckland;
 use App\Support\EventPresenter;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,7 +20,9 @@ class HomeController extends Controller
 
         return Inertia::render('Welcome', [
             'community' => $community ? EventPresenter::communityCard($community) : null,
-            'events' => EventPresenter::collection($events),
+            'events' => Auckland::prelaunch() ? [] : EventPresenter::collection($events),
+            'regularNights' => Auckland::regularNights($community),
+            'waitlistCount' => $community?->members()->count() ?? 0,
         ]);
     }
 }

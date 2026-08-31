@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Rsvp;
 use App\Models\User;
 use App\Services\StripeCatalogService;
+use App\Support\Auckland;
 use App\Support\EventBudget;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,6 +28,11 @@ class EventController extends Controller
             'stripeConfigured' => $this->stripe->configured(),
             'stripePrices' => $this->stripe->prices($request->boolean('refresh')),
             'feePercent' => (int) $this->auckland()->platform_fee_percent,
+            'seriesOptions' => collect(Auckland::seriesCatalog())
+                ->map(fn (array $item, string $key) => ['key' => $key, ...$item])
+                ->values()
+                ->all(),
+            'suburbs' => Auckland::suburbs(),
         ]);
     }
 
@@ -55,6 +61,11 @@ class EventController extends Controller
             'stripeConfigured' => $this->stripe->configured(),
             'stripePrices' => $this->stripe->prices($request->boolean('refresh')),
             'feePercent' => (int) $this->auckland()->platform_fee_percent,
+            'seriesOptions' => collect(Auckland::seriesCatalog())
+                ->map(fn (array $item, string $key) => ['key' => $key, ...$item])
+                ->values()
+                ->all(),
+            'suburbs' => Auckland::suburbs(),
         ]);
     }
 
@@ -137,7 +148,8 @@ class EventController extends Controller
             'starts_at' => ['required', 'date'],
             'venue_name' => ['required', 'string', 'max:160'],
             'venue_address' => ['nullable', 'string', 'max:255'],
-            'suburb' => ['nullable', 'string', 'max:80'],
+            'suburb' => Auckland::suburbRules(required: true),
+            'series' => Auckland::seriesRules(),
             'capacity' => ['required', 'integer', 'min:2', 'max:200'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'venue_cost' => ['nullable', 'numeric', 'min:0'],
@@ -154,7 +166,8 @@ class EventController extends Controller
             'starts_at' => $validated['starts_at'],
             'venue_name' => $validated['venue_name'],
             'venue_address' => $validated['venue_address'] ?? null,
-            'suburb' => $validated['suburb'] ?? 'Auckland',
+            'suburb' => $validated['suburb'],
+            'series' => $validated['series'] ?? null,
             'capacity' => $validated['capacity'],
             'price_cents' => (int) round(((float) ($validated['price'] ?? 0)) * 100),
             'venue_cost_cents' => (int) round(((float) ($validated['venue_cost'] ?? 0)) * 100),
@@ -180,6 +193,7 @@ class EventController extends Controller
             'venue_name' => $event->venue_name,
             'venue_address' => $event->venue_address,
             'suburb' => $event->suburb,
+            'series' => $event->series,
             'capacity' => $event->capacity,
             'price' => $event->price_cents / 100,
             'venue_cost' => $event->venue_cost_cents / 100,

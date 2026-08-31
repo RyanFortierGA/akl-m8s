@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 
 type EventCard = {
@@ -29,6 +30,10 @@ defineProps<{
     meetPrompt: { title: string; emoji: string; url: string } | null;
     stats: { events_attended: number; mates: number; is_admin: boolean };
 }>();
+
+const page = usePage();
+const prelaunch = computed(() => (page.props.club as { prelaunch: boolean }).prelaunch);
+const launchLabel = computed(() => (page.props.club as { launchLabel: string }).launchLabel);
 </script>
 
 <template>
@@ -60,8 +65,13 @@ defineProps<{
         <section>
             <h2 class="mb-3 font-bold">Upcoming</h2>
             <div v-if="!upcoming.length" class="rounded-2xl border bg-card p-6 text-muted-foreground">
-                No nights booked yet.
-                <Link href="/events" class="text-primary">Grab a spot.</Link>
+                <template v-if="prelaunch">
+                    Nights kick off in {{ launchLabel }}. You are on the waitlist.
+                </template>
+                <template v-else>
+                    No nights booked yet.
+                    <Link href="/events" class="text-primary">Grab a spot.</Link>
+                </template>
             </div>
             <div class="grid gap-3 md:grid-cols-2">
                 <Link
@@ -97,7 +107,7 @@ defineProps<{
             </div>
         </section>
 
-        <section>
+        <section v-if="!prelaunch">
             <h2 class="mb-3 font-bold">You might like</h2>
             <div class="grid gap-3 md:grid-cols-3">
                 <Link

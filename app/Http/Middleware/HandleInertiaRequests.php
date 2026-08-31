@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Auckland;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -60,6 +61,11 @@ class HandleInertiaRequests extends Middleware
                     : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'aucklandSuburbs' => Auckland::suburbs(),
+            'club' => [
+                'prelaunch' => Auckland::prelaunch(),
+                'launchLabel' => Auckland::launchLabel(),
+            ],
         ];
     }
 }

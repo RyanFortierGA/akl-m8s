@@ -37,7 +37,7 @@ function setStatus(id: number, status: string, community: string, slug: string) 
                     <div class="font-semibold">{{ person.name }}</div>
                     <div class="text-sm text-muted-foreground">
                         {{ person.suburb }} · {{ person.events_attended }} events ·
-                        {{ person.coming_alone ? 'alone' : 'with a mate' }}
+                        {{ person.coming_alone ? 'solo' : 'with a mate' }}
                     </div>
                 </div>
                 <div class="flex items-center gap-2 text-sm">

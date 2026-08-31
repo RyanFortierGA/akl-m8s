@@ -40,6 +40,6 @@ class ClubSetupTest extends TestCase
         $this->seed(AucklandClubSeeder::class);
 
         $this->assertSame(1, User::query()->where('email', 'ryan@aklm8s.nz')->count());
-        $this->assertSame(6, Event::query()->count());
+        $this->assertSame(8, Event::query()->count());
     }
 }

@@ -51,7 +51,7 @@ class ClubBootstrap
                 'name' => 'Auckland M8s',
                 'city' => 'Auckland',
                 'tagline' => 'Meet people. Do stuff. Make mates.',
-                'description' => 'A club for guys in Auckland who want a reliable way to make new friends. Structured nights, no existing group required, and you will not be the only person coming alone.',
+                'description' => 'A club for guys in Auckland. Curated nights, venue booked, teams mixed. Solo or with mates.',
                 'primary_color' => '#1E2C2A',
                 'accent_color' => '#C45C26',
             ],
@@ -153,9 +153,10 @@ class ClubBootstrap
         $catalog = [
             [
                 'slug' => 'friday-football',
+                'series' => 'football',
                 'title' => 'Friday Football',
                 'emoji' => '⚽',
-                'description' => 'Twenty guys, one 5-a-side pitch, no existing friend groups. Come alone — most people are.',
+                'description' => 'Twenty guys, one pitch, teams mixed. Most come solo. Mates welcome too.',
                 'starts_at' => $now->copy()->next('Friday')->setTime(18, 30),
                 'ends_at' => $now->copy()->next('Friday')->setTime(20, 0),
                 'venue_name' => 'Mt Eden 5-a-side',
@@ -170,6 +171,7 @@ class ClubBootstrap
             ],
             [
                 'slug' => 'bowling-night',
+                'series' => 'bowling',
                 'title' => 'Bowling Night',
                 'emoji' => '🎳',
                 'description' => 'Lanes booked, shoes included. Easy first night if sport is not your thing.',
@@ -187,6 +189,7 @@ class ClubBootstrap
             ],
             [
                 'slug' => 'sunday-hoops',
+                'series' => 'hoops',
                 'title' => 'Sunday Hoops',
                 'emoji' => '🏀',
                 'description' => 'Casual run at Victoria Park. Mixed ability, short games, names on the sideline so nobody is left standing around.',
@@ -204,6 +207,7 @@ class ClubBootstrap
             ],
             [
                 'slug' => 'pints-and-pool',
+                'series' => 'pool',
                 'title' => 'Pints & Pool',
                 'emoji' => '🎱',
                 'description' => 'A table booked in Ponsonby. Arrive, grab a pint, get put on a table with two people you do not know yet.',
@@ -221,9 +225,10 @@ class ClubBootstrap
             ],
             [
                 'slug' => 'friday-bar-night',
+                'series' => 'bar',
                 'title' => 'Friday Bar Night',
                 'emoji' => '🍻',
-                'description' => 'A corner booked on K Road, a couple of ice-breakers, then a pub-quiz round. The point is nobody already knows each other.',
+                'description' => 'Corner booked on K Road, ice-breakers, then pub quiz. Mixed tables on purpose.',
                 'starts_at' => $now->copy()->addWeek()->next('Friday')->setTime(19, 30),
                 'ends_at' => $now->copy()->addWeek()->next('Friday')->setTime(22, 0),
                 'venue_name' => 'The Whiskey',
@@ -237,10 +242,47 @@ class ClubBootstrap
                 'cost_notes' => 'Quiz + welcome drinks',
             ],
             [
+                'slug' => 'mtg-night',
+                'series' => 'mtg',
+                'title' => 'MTG Night',
+                'emoji' => '🃏',
+                'description' => 'Commander and casual drafts at a central table. Borrow a deck if you need one.',
+                'starts_at' => $now->copy()->next('Thursday')->setTime(19, 0),
+                'ends_at' => $now->copy()->next('Thursday')->setTime(22, 0),
+                'venue_name' => 'Counter Culture',
+                'venue_address' => 'Victoria St West',
+                'suburb' => 'Auckland CBD',
+                'capacity' => 14,
+                'price_cents' => 1000,
+                'venue_cost_cents' => 0,
+                'host_cost_cents' => 3000,
+                'other_cost_cents' => 2000,
+                'cost_notes' => 'Table hire + prize cards',
+            ],
+            [
+                'slug' => 'trivia-night',
+                'series' => 'trivia',
+                'title' => 'Trivia Night',
+                'emoji' => '🧠',
+                'description' => 'Pub quiz teams assigned on the night. Good if you want a low-key first one.',
+                'starts_at' => $now->copy()->next('Tuesday')->setTime(19, 30),
+                'ends_at' => $now->copy()->next('Tuesday')->setTime(22, 0),
+                'venue_name' => 'The Birdcage',
+                'venue_address' => 'Fort St',
+                'suburb' => 'Auckland CBD',
+                'capacity' => 24,
+                'price_cents' => 1000,
+                'venue_cost_cents' => 0,
+                'host_cost_cents' => 4000,
+                'other_cost_cents' => 2000,
+                'cost_notes' => 'Table + quiz host',
+            ],
+            [
                 'slug' => 'first-football-night',
+                'series' => 'football',
                 'title' => 'First Football Night',
                 'emoji' => '⚽',
-                'description' => 'The night Auckland M8s started. Most of these guys came alone.',
+                'description' => 'The night Auckland M8s started. Most of the room came solo.',
                 'starts_at' => $now->copy()->subDays(10)->setTime(18, 30),
                 'ends_at' => $now->copy()->subDays(10)->setTime(20, 0),
                 'venue_name' => 'Mt Eden 5-a-side',
@@ -256,13 +298,14 @@ class ClubBootstrap
         ];
 
         return collect($catalog)->map(function (array $event) use ($community, $admin) {
-            return Event::query()->firstOrCreate(
+            return Event::query()->updateOrCreate(
                 [
                     'community_id' => $community->id,
                     'slug' => $event['slug'],
                 ],
                 [
                     'organizer_id' => $admin->id,
+                    'series' => $event['series'] ?? null,
                     'title' => $event['title'],
                     'emoji' => $event['emoji'],
                     'description' => $event['description'],
@@ -298,6 +341,8 @@ class ClubBootstrap
         $this->fillRsvps($bySlug->get('sunday-hoops'), $all->take(9), Rsvp::STATUS_CONFIRMED, 0);
         $this->fillRsvps($bySlug->get('pints-and-pool'), $all->take(5), Rsvp::STATUS_CONFIRMED, 1000);
         $this->fillRsvps($bySlug->get('friday-bar-night'), $all->take(8), Rsvp::STATUS_CONFIRMED, 1000);
+        $this->fillRsvps($bySlug->get('mtg-night'), $all->take(5), Rsvp::STATUS_CONFIRMED, 1000);
+        $this->fillRsvps($bySlug->get('trivia-night'), $all->take(7), Rsvp::STATUS_CONFIRMED, 1000);
         $this->fillRsvps($bySlug->get('first-football-night'), $all, Rsvp::STATUS_ATTENDED, 1500);
 
         $past = $bySlug->get('first-football-night');
